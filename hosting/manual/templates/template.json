@@ -1,0 +1,35 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Branch stack creation for AWS Amplify Console",
+    "Parameters": {
+        "env": {
+            "Type": "String"
+        },
+        "appId": {
+            "Type": "String"
+        }
+    },
+    "Conditions": {
+        "ShouldNotCreateEnvResources": {
+            "Fn::Equals": [
+                {
+                    "Ref": "env"
+                },
+                "NONE"
+            ]
+        }
+    },
+    "Resources": {
+        "AmplifyBranch": {
+            "Type": "AWS::Amplify::Branch",
+            "Properties": {
+                "BranchName": {
+                    "Ref": "env"
+                },
+                "AppId": {
+                    "Ref": "appId"
+                }
+            }
+        }
+    }
+}
