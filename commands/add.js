@@ -1,8 +1,19 @@
 import QuestionGenerator from '../modules/questions/question-generator'
 const hostingModule = require('../hosting/index');
+const chalk = require('chalk');
 
 async function run(context) {
-    hostingModule.enable(context);
+    try {
+      await hostingModule.enable(context);
+    } catch(err) {
+      if (err.name === 'ValidationError') {
+        console.log(chalk.red(err.message));
+      } else {
+        console.log(err.name);
+        console.log(err.message);
+      }
+    }
+    
   }
   
   module.exports = {

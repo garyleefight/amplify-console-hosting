@@ -7,6 +7,9 @@
         },
         "appId": {
             "Type": "String"
+        },
+        "type": {
+            "Type": "String"
         }
     },
     "Conditions": {

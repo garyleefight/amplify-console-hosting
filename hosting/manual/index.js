@@ -8,7 +8,7 @@ function enable(context) {
     //Constants
     const category = constants.CATEGORY;
     const resourceName = constants.CONSOLE_RESOURCE_NAME;
-    const categories = constants.CATEGORY;
+    const categories = constants.CATEGORIES;
 
     // Init template
     const templateFilePath = path.join(__dirname, constants.TEMPLATE_DIR, constants.TEMPLATE_FILE_NAME);
@@ -19,6 +19,7 @@ function enable(context) {
     fs.ensureDirSync(serviceDirPath);
 
     let jsonString = JSON.stringify(templateContent, null, 4);
+    console.log(pathManager.getTemplatePath(context));
     fs.writeFileSync(pathManager.getTemplatePath(context), jsonString, 'utf8');
 
     // Init meta
@@ -37,7 +38,7 @@ function enable(context) {
     // Init team-provider-info
     const { amplify } = context;
     const currEnv = amplify.getEnvInfo().envName;
-    const teamProviderInfoFilePath = pathManager.getProviderInfoFilePath();
+    const teamProviderInfoFilePath = pathManager.getProviderInfoFilePath(context);
     const teamProviderInfo = amplify.readJsonFile(teamProviderInfoFilePath);
     if (!teamProviderInfo[currEnv][categories]) {
         teamProviderInfo[currEnv][categories] = {};
@@ -54,12 +55,12 @@ function enable(context) {
     const appId = utils.getAppIdForCurrEnv(context);
     teamProviderInfo[currEnv][categories][category][resourceName] = {
         appId: appId,
-        type: TYPE_MANUAL
+        type: constants.TYPE_MANUAL
     }
     fs.writeFileSync(teamProviderInfoFilePath, JSON.stringify(teamProviderInfo, null, 4));
 
     // Init backend config
-    const backendConfigFilePath = pathManager.getBackendConfigPath();
+    const backendConfigFilePath = pathManager.getBackendConfigPath(context);
     const backendConfig = context.amplify.readJsonFile(backendConfigFilePath);
 
     if (!backendConfig[category]) {
@@ -71,7 +72,7 @@ function enable(context) {
     }
 
     backendConfig[category][resourceName] = {
-        type: TYPE_MANUAL
+        type: constants.TYPE_MANUAL
     }
 }
 

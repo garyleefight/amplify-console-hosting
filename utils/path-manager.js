@@ -10,7 +10,7 @@ function getHostingDirPath(context) {
 }
 
 function getAmplifyHostingDirPath(context) {
-    return path.join(getBackendDirPath(context), constants.CATEGORY, constants.HOSTING_CATEGORY);
+    return path.join(getBackendDirPath(context), constants.CATEGORY, constants.CONSOLE_RESOURCE_NAME);
 }
 
 function getTemplatePath(context) {

@@ -4,12 +4,12 @@ function getAppIdForCurrEnv(context) {
     const { amplify } = context;
     const currEnv = amplify.getEnvInfo().envName;
     const teamProviderInfo = getTeamProviderInfo(context);
-    return teamProviderInfo[currEnv][constants.APPID_KEY];
+    return teamProviderInfo[currEnv][constants.PROVIDER][constants.APPID_KEY];
 }
 
 function getTeamProviderInfo(context) {
     const { amplify } = context;
-    const teamProviderInfoFilePath = pathManager.getProviderInfoFilePath();
+    const teamProviderInfoFilePath = amplify.pathManager.getProviderInfoFilePath();
     const teamProviderInfo = amplify.readJsonFile(teamProviderInfoFilePath);
     return teamProviderInfo;
 }
