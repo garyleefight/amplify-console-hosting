@@ -25,11 +25,16 @@ function getBackendConfigPath(context) {
     return context.amplify.pathManager.getBackendConfigFilePath();
 }
 
+function getAmplifyMetaFilePath(context) {
+    return context.amplify.pathManager.getAmplifyMetaFilePath();
+}
+
 module.exports = {
     getBackendDirPath,
     getHostingDirPath,
     getAmplifyHostingDirPath,
     getTemplatePath,
     getProviderInfoFilePath,
-    getBackendConfigPath
+    getBackendConfigPath,
+    getAmplifyMetaFilePath
 }

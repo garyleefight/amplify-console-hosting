@@ -1,10 +1,14 @@
 const constants = require('../constants/plugin-constants');
 
 function getAppIdForCurrEnv(context) {
-    const { amplify } = context;
-    const currEnv = amplify.getEnvInfo().envName;
+    const currEnv = getCurrEnv(context);
     const teamProviderInfo = getTeamProviderInfo(context);
     return teamProviderInfo[currEnv][constants.PROVIDER][constants.APPID_KEY];
+}
+
+function getCurrEnv(context) {
+    const { amplify } = context;
+    return amplify.getEnvInfo().envName;
 }
 
 function getTeamProviderInfo(context) {
@@ -14,9 +18,20 @@ function getTeamProviderInfo(context) {
     return teamProviderInfo;
 }
 
+function getProjectConfig(context) {
+    return context.amplify.getProjectConfig();
+}
+
+function getLocalEnvInfo(context) {
+    return context.amplify.getEnvInfo();
+}
+
 module.exports = {
     getAppIdForCurrEnv,
-    getTeamProviderInfo
+    getTeamProviderInfo,
+    getCurrEnv,
+    getProjectConfig,
+    getLocalEnvInfo
 }
 
 

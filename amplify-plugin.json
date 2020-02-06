@@ -7,6 +7,7 @@
         "console",
         "push",
         "remove",
+        "publish",
         "help"
     ],
     "eventHandlers": [
