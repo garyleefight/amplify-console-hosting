@@ -26,12 +26,17 @@ function getLocalEnvInfo(context) {
     return context.amplify.getEnvInfo();
 }
 
+function getRegionForCurrEnv(context) {
+    return context.amplify.getProjectMeta().providers.awscloudformation.Region;
+}
+
 module.exports = {
     getAppIdForCurrEnv,
     getTeamProviderInfo,
     getCurrEnv,
     getProjectConfig,
-    getLocalEnvInfo
+    getLocalEnvInfo,
+    getRegionForCurrEnv
 }
 
 

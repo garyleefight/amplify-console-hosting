@@ -31,6 +31,24 @@ async function askDeployType() {
     }
 }
 
+async function askCICDConfirmQuestion() {
+    return askConfirmQuestion(Constants.CICD_CONFIRM_QUESTION);
+} 
+
+async function askConfirmQuestion(message) {
+    const questionKey = 'question';
+    const anwser = await inquirer.prompt([
+        {
+            type: "confirm",
+            name: questionKey,
+            message: message,
+            default: true
+        }
+    ]);
+    return anwser[questionKey];
+}
+
 module.exports = {
-    askDeployType
+    askDeployType,
+    askCICDConfirmQuestion
 }

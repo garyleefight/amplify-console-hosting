@@ -20,10 +20,19 @@
                 },
                 "NONE"
             ]
+        },
+        "isManual": {
+            "Fn::Equals": [
+                {
+                    "Ref": "type"
+                },
+                "manual"
+            ]
         }
     },
     "Resources": {
         "AmplifyBranch": {
+            "Condition": "isManual",
             "Type": "AWS::Amplify::Branch",
             "Properties": {
                 "BranchName": {
