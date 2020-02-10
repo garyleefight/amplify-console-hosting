@@ -1,5 +1,4 @@
 const constants = require('../constants/plugin-constants');
-const path = require('path');
 const pathManager = require('../utils/path-manager');
 const fs = require('fs-extra');
 const utils = require('../utils/amplify-context-utils');
@@ -9,12 +8,25 @@ const clientFactory = require('../utils/client-factory');
 const ora = require('ora');
 
 const VALIDATING_MESSAGE = 'Validating ...'
+const HELP_INFO_PLACE_HOLDER = `Manual deployment allows you to publish your web app to the Amplify Console without connecting a Git provider.\
+Continuous deployment allows you to publish changes on every code commit by connecting your GitHub, Bitbucket, GitLab, or AWS CodeCommit repositories.`;
 
 async function enable(context) {
     await validateHosting(context);
-    const deployType = await questions.askDeployType();
-    const hostingModule = require('./' + deployType + '/index');
-    await hostingModule.enable(context);
+    let doesSelectHelp = false;
+    do {
+        const deployType = await questions.askDeployType();
+        if(deployType !== constants.TYPE_HELP) {
+            doesSelectHelp = false;
+            const hostingModule = require('./' + deployType + '/index');
+            await hostingModule.enable(context);
+        } else {
+            doesSelectHelp = true;
+            console.log(HELP_INFO_PLACE_HOLDER);
+            console.log('-------------------------------');
+        }     
+    } while(doesSelectHelp);
+    
 }
 
 async function publish(context) {

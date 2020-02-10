@@ -1,5 +1,6 @@
-const Constants = require('../../constants/question-constants');
+const constants = require('../../constants/question-constants');
 const inquirer = require('inquirer');
+const pluginConstants = require('../../constants/plugin-constants');
 
 const ANWSER_MANUAL = 'manual';
 const ANWSER_CICD = 'cicd';
@@ -11,32 +12,32 @@ async function askDeployType() {
             {
                 type: "list",
                 name: "anwser",
-                message: Constants.DEPLOY_TYPE_QUESTION,
+                message: constants.DEPLOY_TYPE_QUESTION,
                 choices: [
-                    Constants.DEPLOY_TYPE_QUESTION_MANUAL,
-                    Constants.DEPLOY_TYPE_QUESTION_CICD,
-                    Constants.LEARN_MORE
+                    constants.DEPLOY_TYPE_QUESTION_MANUAL,
+                    constants.DEPLOY_TYPE_QUESTION_CICD,
+                    constants.LEARN_MORE
                 ],
-                default: Constants.DEPLOY_TYPE_QUESTION_MANUAL
+                default: constants.DEPLOY_TYPE_QUESTION_MANUAL
             }
         ]
     );
     switch (anwser) {
-        case Constants.DEPLOY_TYPE_QUESTION_MANUAL:
-            return ANWSER_MANUAL;
-        case Constants.DEPLOY_TYPE_QUESTION_CICD:
-            return ANWSER_CICD;
-        case Constants.LEARN_MORE:
-            return ANWSER_LEARN_MORE;
+        case constants.DEPLOY_TYPE_QUESTION_MANUAL:
+            return pluginConstants.TYPE_MANUAL;
+        case constants.DEPLOY_TYPE_QUESTION_CICD:
+            return pluginConstants.TYPE_CICD;
+        case constants.LEARN_MORE:
+            return pluginConstants.TYPE_HELP;
     }
 }
 
 async function askCICDConfirmQuestion() {
-    return askConfirmQuestion(Constants.CICD_CONFIRM_QUESTION);
+    return askConfirmQuestion(constants.CICD_CONFIRM_QUESTION);
 } 
 
 async function askViewAppQuestion() {
-    return askConfirmQuestion(Constants.VIEW_APP_QUESTION);
+    return askConfirmQuestion(constants.VIEW_APP_QUESTION);
 }
 
 async function askConfirmQuestion(message) {
