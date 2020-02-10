@@ -1,6 +1,6 @@
 export const CATEGORY = 'hosting';
 export const CATEGORIES = 'categories';
-export const CONSOLE_RESOURCE_NAME = 'amplify-console-hosting';
+export const CONSOLE_RESOURCE_NAME = 'amplifyconsole';
 export const TEMPLATE_FILE_NAME = 'template.json';
 export const PARAMETERS_FILE_NAME = 'parameters.json';
 export const TEMPLATE_DIR = 'templates';

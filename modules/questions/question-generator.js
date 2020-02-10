@@ -2,10 +2,6 @@ const constants = require('../../constants/question-constants');
 const inquirer = require('inquirer');
 const pluginConstants = require('../../constants/plugin-constants');
 
-const ANWSER_MANUAL = 'manual';
-const ANWSER_CICD = 'cicd';
-const ANWSER_LEARN_MORE = 'help';
-
 async function askDeployType() {
     const { anwser } = await inquirer.prompt(
         [

@@ -11,7 +11,6 @@ function initCFNTemplate(context, templateFilePath) {
     fs.ensureDirSync(serviceDirPath);
 
     let jsonString = JSON.stringify(templateContent, null, 4);
-    console.log(pathManager.getTemplatePath(context));
     fs.writeFileSync(pathManager.getTemplatePath(context), jsonString, 'utf8');
 }
 
