@@ -5,8 +5,8 @@ async function enable(context) {
     await enableMod.enable(context);
 }
 
-function publish(context) {
-    publshMod.publish(context);
+async function publish(context) {
+    await publshMod.publish(context);
 }
 
 module.exports = {

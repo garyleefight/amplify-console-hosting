@@ -35,6 +35,10 @@ async function askCICDConfirmQuestion() {
     return askConfirmQuestion(Constants.CICD_CONFIRM_QUESTION);
 } 
 
+async function askViewAppQuestion() {
+    return askConfirmQuestion(Constants.VIEW_APP_QUESTION);
+}
+
 async function askConfirmQuestion(message) {
     const questionKey = 'question';
     const anwser = await inquirer.prompt([
@@ -50,5 +54,6 @@ async function askConfirmQuestion(message) {
 
 module.exports = {
     askDeployType,
+    askViewAppQuestion,
     askCICDConfirmQuestion
 }
