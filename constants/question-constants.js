@@ -44,3 +44,5 @@ export const VIEW_URL_QUESTION = 'Would you like to open the deployed website?';
 export const INPUT_BLANK_VALIDATION = 'Input can not be blank';
 export const STATUS_CODE_VALIDATION = 'Status code can only be number';
 export const FRONTEND_NAME_VALIDATION = 'The frontend environment already exists. Please input a new name';
+
+export const APP_CONFIGURE_QUESTION = `We recommends you open ${chalk.green('AWS Amplify Console')} to configure advanced settings such as ${chalk.yellow('rewrite/redirect, basic auth, custom domain...')} Open your Amplify Console app to configure?`;

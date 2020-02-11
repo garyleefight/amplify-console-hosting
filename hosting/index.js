@@ -61,7 +61,6 @@ function initEnv(context) {
     }
 
     const type = backendConfig[constants.CATEGORY][constants.CONSOLE_RESOURCE_NAME].type;
-    console.log(type);
     const initEnvMod = require('./' + type + '/index');
     initEnvMod.initEnv(context);
 }
@@ -75,7 +74,24 @@ async function remove(context) {
         context.print.info(err.stack);
         context.print.error('There was an error removing the auth resource');
     })
+}
 
+async function console(context) {
+    if (!isHostingEnabled) {
+        throw new ValidationError("Amplify console hosting is not enabled!");
+    }
+    const type = loadDeployType(context);
+    const hostingModule = require('./' + type + '/index');
+    await hostingModule.console(context);
+}
+
+async function configure(context) {
+    if (!isHostingEnabled) {
+        throw new ValidationError("Amplify console hosting is not enabled!");
+    }
+    const type = loadDeployType(context);
+    const hostingModule = require('./' + type + '/index');
+    await hostingModule.configure(context);
 }
 
 function loadDeployType(context) {
@@ -121,5 +137,7 @@ module.exports = {
     enable,
     publish,
     initEnv,
-    remove
+    remove,
+    console,
+    configure
 };

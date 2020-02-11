@@ -36,6 +36,10 @@ async function askViewAppQuestion() {
     return askConfirmQuestion(constants.VIEW_APP_QUESTION);
 }
 
+async function askConfigureAppQuestion() {
+    return askConfirmQuestion(constants.APP_CONFIGURE_QUESTION);
+}
+
 async function askConfirmQuestion(message) {
     const questionKey = 'question';
     const anwser = await inquirer.prompt([
@@ -52,5 +56,6 @@ async function askConfirmQuestion(message) {
 module.exports = {
     askDeployType,
     askViewAppQuestion,
-    askCICDConfirmQuestion
+    askCICDConfirmQuestion,
+    askConfigureAppQuestion
 }
