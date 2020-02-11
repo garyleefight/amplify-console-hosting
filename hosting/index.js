@@ -66,6 +66,18 @@ function initEnv(context) {
     initEnvMod.initEnv(context);
 }
 
+async function remove(context) {
+    const category = constants.CATEGORY;
+    const resource = constants.CONSOLE_RESOURCE_NAME;
+    const { amplify } = context;
+
+    return amplify.removeResource(context, category, resource).catch(err => {
+        context.print.info(err.stack);
+        context.print.error('There was an error removing the auth resource');
+    })
+
+}
+
 function loadDeployType(context) {
     const amplifyMetaFilePath = pathManager.getAmplifyMetaFilePath(context);
     const amplifyMeta = context.amplify.readJsonFile(amplifyMetaFilePath);
@@ -108,5 +120,6 @@ function isHostingEnabled(context) {
 module.exports = {
     enable,
     publish,
-    initEnv
+    initEnv,
+    remove
 };
