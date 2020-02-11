@@ -1,4 +1,5 @@
 const constants = require('../constants/plugin-constants');
+const pathManager = require('../utils/path-manager');
 
 function getAppIdForCurrEnv(context) {
     const currEnv = getCurrEnv(context);
@@ -13,9 +14,16 @@ function getCurrEnv(context) {
 
 function getTeamProviderInfo(context) {
     const { amplify } = context;
-    const teamProviderInfoFilePath = amplify.pathManager.getProviderInfoFilePath();
+    const teamProviderInfoFilePath = pathManager.getProviderInfoFilePath(context);
     const teamProviderInfo = amplify.readJsonFile(teamProviderInfoFilePath);
     return teamProviderInfo;
+}
+
+function getBackendInfoConfig(context) {
+    const { amplify } = context;
+    const backendConfigFilePath = pathManager.getBackendConfigPath(context);
+    const backendConfig = amplify.readJsonFile(backendConfigFilePath);
+    return backendConfig;
 }
 
 function getProjectConfig(context) {
@@ -32,6 +40,7 @@ function getRegionForCurrEnv(context) {
 
 module.exports = {
     getAppIdForCurrEnv,
+    getBackendInfoConfig,
     getTeamProviderInfo,
     getCurrEnv,
     getProjectConfig,

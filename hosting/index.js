@@ -40,6 +40,32 @@ async function publish(context) {
 
 }
 
+function initEnv(context) {
+    const categories = constants.CATEGORIES;
+    const category = constants.CATEGORY;
+    const resource = constants.CONSOLE_RESOURCE_NAME;
+    const backendConfig = utils.getBackendInfoConfig(context);
+
+    if(!backendConfig[category] || !backendConfig[category][resource]) {
+        return;
+    }
+    
+    const teamProviderInfo = utils.getTeamProviderInfo(context);
+    const currEnv = utils.getCurrEnv(context);
+    if(
+        teamProviderInfo[currEnv][categories] && 
+        teamProviderInfo[currEnv][categories][category] &&
+        teamProviderInfo[currEnv][categories][category][resource]
+    ) {
+        return;
+    }
+
+    const type = backendConfig[constants.CATEGORY][constants.CONSOLE_RESOURCE_NAME].type;
+    console.log(type);
+    const initEnvMod = require('./' + type + '/index');
+    initEnvMod.initEnv(context);
+}
+
 function loadDeployType(context) {
     const amplifyMetaFilePath = pathManager.getAmplifyMetaFilePath(context);
     const amplifyMeta = context.amplify.readJsonFile(amplifyMetaFilePath);
@@ -81,5 +107,6 @@ function isHostingEnabled(context) {
 
 module.exports = {
     enable,
-    publish
+    publish,
+    initEnv
 };
