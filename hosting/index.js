@@ -6,6 +6,7 @@ const questions = require('../modules/questions/question-generator');
 const ValidationError = require('../error/validation-error').default;
 const clientFactory = require('../utils/client-factory');
 const ora = require('ora');
+const tableUtis = require('../utils/table-utils');
 
 const VALIDATING_MESSAGE = 'Validating ...'
 const HELP_INFO_PLACE_HOLDER = `Manual deployment allows you to publish your web app to the Amplify Console without connecting a Git provider.\
@@ -94,6 +95,15 @@ async function configure(context) {
     await hostingModule.configure(context);
 }
 
+async function status(context) {
+    if (!isHostingEnabled) {
+        throw new ValidationError("Amplify console hosting is not enabled!");
+    }
+
+    const appId = utils.getAppIdForCurrEnv(context);
+    await tableUtis.generateTableContentForApp(context, appId);
+}
+
 function loadDeployType(context) {
     const amplifyMetaFilePath = pathManager.getAmplifyMetaFilePath(context);
     const amplifyMeta = context.amplify.readJsonFile(amplifyMetaFilePath);
@@ -139,5 +149,6 @@ module.exports = {
     initEnv,
     remove,
     console,
-    configure
+    configure,
+    status
 };
