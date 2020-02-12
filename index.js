@@ -16,12 +16,11 @@ async function handleAmplifyEvent(context, args) {
 }
 
 function initEnv(context) {
-  console.log('helloworld');
   hosting.initEnv(context);
 }
 
 module.exports = {
   executeAmplifyCommand,
   handleAmplifyEvent,
-  initEnv
+  initEnv,
 };

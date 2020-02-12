@@ -4,8 +4,6 @@
     "commands": [
         "add",
         "configure",
-        "console",
-        "push",
         "remove",
         "publish",
         "help",
