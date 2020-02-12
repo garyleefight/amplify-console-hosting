@@ -4,11 +4,12 @@ const utils = require('../../utils/amplify-context-utils');
 const builder = require('../../utils/build-utils');
 const clientFactory = require('../../utils/client-factory');
 const amplifyUtils = require('../../utils/amplify-console-utils');
-
+const constants = require('../../constants/plugin-constants');
 
 async function publish(context) {
   let artifactsPath = null;
   try {
+    await context.amplify.pushResources(context, constants.CATEGORY, constants.CONSOLE_RESOURCE_NAME);
     const amplifyClient = await clientFactory.getAmplifyClient(context);
     const appId = utils.getAppIdForCurrEnv(context);
     const env = utils.getCurrEnv(context);

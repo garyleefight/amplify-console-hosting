@@ -7,12 +7,7 @@
         "remove",
         "publish",
         "help",
-        "status"
-    ],
-    "eventHandlers": [
-        "PreInit",
-        "PostInit",
-        "PrePush",
-        "PostPush"
+        "status",
+        "console"
     ]
 }
