@@ -9,7 +9,9 @@ const constants = require('../../constants/plugin-constants');
 async function publish(context) {
   let artifactsPath = null;
   try {
-    await context.amplify.pushResources(context, constants.CATEGORY, constants.CONSOLE_RESOURCE_NAME);
+    await context
+      .amplify
+      .pushResources(context, constants.CATEGORY, constants.CONSOLE_RESOURCE_NAME);
     const amplifyClient = await clientFactory.getAmplifyClient(context);
     const appId = utils.getAppIdForCurrEnv(context);
     const env = utils.getCurrEnv(context);
