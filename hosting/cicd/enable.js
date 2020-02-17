@@ -4,7 +4,8 @@ const questions = require('../../modules/questions/question-generator');
 const configUtils = require('../../utils/config-utils');
 const constants = require('../../constants/plugin-constants');
 const clientFactory = require('../../utils/client-factory');
-const path = require('path');
+const pathManager = require('../../utils/path-manager');
+const fs = require('fs-extra');
 const ValidationError = require('../../error/validation-error').default;
 
 async function enable(context) {
@@ -22,8 +23,9 @@ async function enable(context) {
   }
   await validateCICDApp(context, appId);
   // Init template
-  const templateFilePath = path.join(__dirname, '..', constants.TEMPLATE_DIR, constants.TEMPLATE_FILE_NAME);
-  configUtils.initCFNTemplate(context, templateFilePath);
+  const serviceDirPath = pathManager.getAmplifyHostingDirPath(context);
+  fs.ensureDirSync(pathManager.getHostingDirPath(context));
+  fs.ensureDirSync(serviceDirPath);
 
   // Init meta
   configUtils.initMetaFile(context, category, resourceName, type);
