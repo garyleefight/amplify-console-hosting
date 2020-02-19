@@ -9,8 +9,8 @@ async function askDeployType() {
       name: 'anwser',
       message: constants.DEPLOY_TYPE_QUESTION,
       choices: [
-        constants.DEPLOY_TYPE_QUESTION_MANUAL,
         constants.DEPLOY_TYPE_QUESTION_CICD,
+        constants.DEPLOY_TYPE_QUESTION_MANUAL,
         constants.LEARN_MORE,
       ],
       default: constants.DEPLOY_TYPE_QUESTION_MANUAL,
@@ -36,6 +36,10 @@ async function askViewAppQuestion() {
   return askConfirmQuestion(constants.VIEW_APP_QUESTION);
 }
 
+async function askServeQuestion() {
+  return askConfirmQuestion(constants.APP_SERVE_QUESTION);
+}
+
 async function askConfigureAppQuestion() {
   return askConfirmQuestion(constants.APP_CONFIGURE_QUESTION);
 }
@@ -58,4 +62,5 @@ module.exports = {
   askViewAppQuestion,
   askCICDConfirmQuestion,
   askConfigureAppQuestion,
+  askServeQuestion,
 };

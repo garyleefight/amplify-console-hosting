@@ -1,11 +1,11 @@
-const { put } = require('request-promise');
-const fs = require('fs-extra');
-const ora = require('ora');
+const { put } = require("request-promise");
+const fs = require("fs-extra");
+const ora = require("ora");
 
-
-const DEPLOY_ARTIFACTS_MESSAGE = 'Deploying build artifacts to the Amplify Console..';
-const DEPLOY_COMPLETE_MESSAGE = 'Deployment complete!';
-const DEPLOY_FAILURE_MESSAGE = 'Deploy failed!';
+const DEPLOY_ARTIFACTS_MESSAGE =
+  "Deploying build artifacts to the Amplify Console..";
+const DEPLOY_COMPLETE_MESSAGE = "Deployment complete!";
+const DEPLOY_FAILURE_MESSAGE = "Deploy failed!";
 
 function getDefaultDomainForApp(appId) {
   return `https://${appId}.amplifyapp.com`;
@@ -15,16 +15,23 @@ function getDefaultDomainForBranch(appId, branch) {
   return `https://${branch}.${appId}.amplifyapp.com`;
 }
 
-async function publishFileToAmplify(appId, branchName, artifactsPath, amplifyClient) {
+async function publishFileToAmplify(
+  appId,
+  branchName,
+  artifactsPath,
+  amplifyClient
+) {
   const spinner = ora();
   spinner.start(DEPLOY_ARTIFACTS_MESSAGE);
   try {
     const params = {
       appId,
-      branchName,
+      branchName
     };
     await cancelAllPendingJob(appId, branchName, amplifyClient);
-    const { zipUploadUrl, jobId } = await amplifyClient.createDeployment(params).promise();
+    const { zipUploadUrl, jobId } = await amplifyClient
+      .createDeployment(params)
+      .promise();
     await httpPutFile(artifactsPath, zipUploadUrl);
     await amplifyClient.startDeployment({ ...params, jobId }).promise();
     await waitJobToSucceed({ ...params, jobId }, amplifyClient);
@@ -38,12 +45,12 @@ async function publishFileToAmplify(appId, branchName, artifactsPath, amplifyCli
 async function cancelAllPendingJob(appId, branchName, amplifyClient) {
   const params = {
     appId,
-    branchName,
+    branchName
   };
   const { jobSummaries } = await amplifyClient.listJobs(params).promise();
   for (const jobSummary of jobSummaries) {
     const { jobId, status } = jobSummary;
-    if (status === 'PENDING' || status === 'RUNNING') {
+    if (status === "PENDING" || status === "RUNNING") {
       const job = { ...params, jobId };
       await amplifyClient.stopJob(job).promise();
     }
@@ -52,27 +59,30 @@ async function cancelAllPendingJob(appId, branchName, amplifyClient) {
 
 function waitJobToSucceed(job, amplifyClient) {
   return new Promise(async (resolve, reject) => {
+    const timeout = setTimeout(() => {
+      console.log("Job Timeout before succeeded");
+      reject();
+    }, 1000 * 60 * 10);
+    let processing = true;
     try {
-      const timeout = setTimeout(() => {
-        console.log('Job Timeout before succeeded');
-        reject();
-      }, 1000 * 60 * 10);
-
-      while (true) {
+      while (processing) {
         const getJobResult = await amplifyClient.getJob(job).promise();
         const jobSummary = getJobResult.job.summary;
-        if (jobSummary.status === 'FAILED') {
+        if (jobSummary.status === "FAILED") {
           console.log(`Job failed.${JSON.stringify(jobSummary)}`);
           clearTimeout(timeout);
+          processing = false;
           resolve();
         }
-        if (jobSummary.status === 'SUCCEED') {
+        if (jobSummary.status === "SUCCEED") {
           clearTimeout(timeout);
+          processing = false;
           resolve();
         }
         await sleep(1000 * 3);
       }
     } catch (err) {
+      processing = false;
       reject(err);
     }
   });
@@ -81,12 +91,12 @@ function waitJobToSucceed(job, amplifyClient) {
 async function httpPutFile(filePath, url) {
   await put({
     body: fs.readFileSync(filePath),
-    url,
+    url
   });
 }
 
 function sleep(ms) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     setTimeout(resolve, ms);
   });
 }
@@ -94,5 +104,5 @@ function sleep(ms) {
 module.exports = {
   getDefaultDomainForApp,
   getDefaultDomainForBranch,
-  publishFileToAmplify,
+  publishFileToAmplify
 };

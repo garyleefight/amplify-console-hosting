@@ -46,3 +46,4 @@ export const STATUS_CODE_VALIDATION = 'Status code can only be number';
 export const FRONTEND_NAME_VALIDATION = 'The frontend environment already exists. Please input a new name';
 
 export const APP_CONFIGURE_QUESTION = `We recommends you open ${chalk.green('AWS Amplify Console')} to configure advanced settings such as ${chalk.yellow('rewrite/redirect, basic auth, custom domain...')} Open your Amplify Console app to configure?`;
+export const APP_SERVE_QUESTION = 'You have set up Continuous deployment with Amplify Console. Visit Amplify Console to view your frontend URL?';
