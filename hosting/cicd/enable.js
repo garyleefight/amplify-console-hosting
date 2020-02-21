@@ -21,13 +21,14 @@ async function enable(context) {
   if (!doConfirm) {
     return;
   }
-  await validateCICDApp(context, appId);
-  // Init template
+  // await validateCICDApp(context, appId);
+  // Directory
   const serviceDirPath = pathManager.getAmplifyHostingDirPath(context);
   fs.ensureDirSync(pathManager.getHostingDirPath(context));
   fs.ensureDirSync(serviceDirPath);
 
   // Init meta
+  // await configUtils.initNoPushMetaFile(context, category, resourceName, type);
   configUtils.initMetaFile(context, category, resourceName, type);
 
   // Init team-provider-info

@@ -8,5 +8,6 @@ export const TYPE_MANUAL = 'manual';
 export const TYPE_CICD = 'cicd';
 export const TYPE_HELP = 'help';
 export const PROVIDER = 'awscloudformation';
+export const CICD_PROVIDER = 'amplifyconsole';
 export const APPID_KEY = 'AmplifyAppId';
 export const ILLEGAL_ARGUMENT_ERROR = 'Illegal argument!';
