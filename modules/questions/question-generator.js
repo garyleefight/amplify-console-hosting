@@ -29,7 +29,7 @@ async function askDeployType() {
 }
 
 async function askCICDConfirmQuestion() {
-  return askConfirmQuestion(constants.CICD_CONFIRM_QUESTION);
+  return askInputQuestion(constants.CICD_CONFIRM_QUESTION);
 }
 
 async function askViewAppQuestion() {
@@ -52,6 +52,18 @@ async function askConfirmQuestion(message) {
       name: questionKey,
       message,
       default: true,
+    },
+  ]);
+  return anwser[questionKey];
+}
+
+async function askInputQuestion(message) {
+  const questionKey = 'question';
+  const anwser = await inquirer.prompt([
+    {
+      type: 'input',
+      name: questionKey,
+      message,
     },
   ]);
   return anwser[questionKey];

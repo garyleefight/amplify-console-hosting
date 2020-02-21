@@ -7,6 +7,7 @@ const clientFactory = require('../../utils/client-factory');
 const pathManager = require('../../utils/path-manager');
 const fs = require('fs-extra');
 const ValidationError = require('../../error/validation-error').default;
+const statusMod = require('../index');
 
 async function enable(context) {
   const region = utils.getRegionForCurrEnv(context);
@@ -16,11 +17,8 @@ async function enable(context) {
   const type = constants.TYPE_CICD;
   await open(`https://${region}.console.aws.amazon.com/amplify/home?region=${region}#/${appId}`);
 
-  const doConfirm = await questions.askCICDConfirmQuestion(context);
+  await questions.askCICDConfirmQuestion(context);
 
-  if (!doConfirm) {
-    return;
-  }
   await validateCICDApp(context, appId);
   // Directory
   const serviceDirPath = pathManager.getAmplifyHostingDirPath(context);
@@ -36,6 +34,9 @@ async function enable(context) {
 
   // Init backend config
   configUtils.initBackendConfig(context, category, resourceName, type);
+
+  console.log('Hosting urls: ');
+  await statusMod.status(context);
 }
 
 async function validateCICDApp(context, appId) {
@@ -44,7 +45,7 @@ async function validateCICDApp(context, appId) {
     appId,
   }).promise();
   if (result.branches.length === 0) {
-    throw new ValidationError('No change was detected');
+    throw new ValidationError("No hosting URL found. Run 'amplify add hosting' again to set up hosting with Amplify Console.");
   }
 }
 
