@@ -21,7 +21,7 @@ async function enable(context) {
   if (!doConfirm) {
     return;
   }
-  // await validateCICDApp(context, appId);
+  await validateCICDApp(context, appId);
   // Directory
   const serviceDirPath = pathManager.getAmplifyHostingDirPath(context);
   fs.ensureDirSync(pathManager.getHostingDirPath(context));
