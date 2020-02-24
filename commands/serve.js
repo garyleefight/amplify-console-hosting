@@ -3,7 +3,7 @@ const chalk = require('chalk');
 
 async function run(context) {
   try {
-    await hostingModule.console(context);
+    await hostingModule.serve(context);
   } catch (err) {
     if (err.name === 'ValidationError') {
       console.log(chalk.red(err.message));

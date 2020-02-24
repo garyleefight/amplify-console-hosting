@@ -19,6 +19,12 @@ function getTeamProviderInfo(context) {
   return teamProviderInfo;
 }
 
+function getMetaInfo(context) {
+  const { amplify } = context;
+  const metaInfoPath = pathManager.getAmplifyMetaFilePath(context);
+  return amplify.readJsonFile(metaInfoPath);
+}
+
 function getBackendInfoConfig(context) {
   const { amplify } = context;
   const backendConfigFilePath = pathManager.getBackendConfigPath(context);
@@ -46,5 +52,6 @@ module.exports = {
   getProjectConfig,
   getLocalEnvInfo,
   getRegionForCurrEnv,
+  getMetaInfo,
 };
 

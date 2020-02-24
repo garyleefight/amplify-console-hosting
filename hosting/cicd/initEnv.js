@@ -1,5 +1,6 @@
 const constants = require('../../constants/plugin-constants');
 const configUtils = require('../../utils/config-utils');
+const utis = require('../../utils/amplify-context-utils');
 
 function initEnv(context) {
   // Constants
@@ -9,6 +10,11 @@ function initEnv(context) {
 
   // Init team-provider-info
   configUtils.initTeamProviderInfo(context, category, resourceName, type);
+
+  // Update #current-cloud-backend
+  const metaContent = utis.getMetaInfo(context);
+  const { lastPushTimeStamp } = metaContent[category][resourceName];
+  configUtils.initCurrBackendMeta(context, category, resourceName, type, lastPushTimeStamp);
 }
 
 module.exports = {
