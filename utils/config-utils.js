@@ -2,6 +2,9 @@ const constants = require('../constants/plugin-constants');
 const pathManager = require('../utils/path-manager');
 const fs = require('fs-extra');
 const utils = require('../utils/amplify-context-utils');
+const path = require('path');
+const clientFactory = require('../utils/client-factory');
+const buildUtils = require('./build-utils');
 
 function initCFNTemplate(context, templateFilePath) {
   const templateContent = context.amplify.readJsonFile(templateFilePath);
@@ -14,11 +17,11 @@ function initCFNTemplate(context, templateFilePath) {
   fs.writeFileSync(pathManager.getTemplatePath(context), jsonString, 'utf8');
 }
 
-function initMetaFile(context, category, resourceName, type) {
+async function initMetaFile(context, category, resourceName, type) {
   const timeStamp = type === constants.TYPE_CICD ? new Date() : undefined;
   const metaData = {
     service: resourceName,
-    providerPlugin: constants.PROVIDER,
+    providerPlugin: type === constants.TYPE_CICD ? undefined : constants.PROVIDER,
     type,
     lastPushTimeStamp: timeStamp,
   };
@@ -31,14 +34,14 @@ function initMetaFile(context, category, resourceName, type) {
 
   if (timeStamp) {
     // init #current-cloud-backend config file for CICD
-    initCurrBackendMeta(context, category, resourceName, type, timeStamp);
+    await initCurrBackendMeta(context, category, resourceName, type, timeStamp);
   }
 }
 
-function initCurrBackendMeta(context, category, resourceName, type, timeStamp) {
+async function initCurrBackendMeta(context, category, resourceName, type, timeStamp) {
   const metaData = {
     service: resourceName,
-    providerPlugin: constants.PROVIDER,
+    providerPlugin: type === constants.TYPE_CICD ? undefined : constants.PROVIDER,
     type,
     lastPushTimeStamp: timeStamp,
   };
@@ -60,6 +63,7 @@ function initCurrBackendMeta(context, category, resourceName, type, timeStamp) {
   const currAmplifyHostingDir = pathManager.getCurrCloudBackendAmplifyHostingDirPath(context);
   fs.ensureDirSync(currHostingDir);
   fs.ensureDirSync(currAmplifyHostingDir);
+  await storeCurrentCloudBackend(context);
 }
 
 function initTeamProviderInfo(context, category, resourceName, type) {
@@ -92,7 +96,7 @@ function initTeamProviderInfo(context, category, resourceName, type) {
   );
 }
 
-function deleteConsoleConfigFromCurrMeta(context) {
+async function deleteConsoleConfigFromCurrMeta(context) {
   const category = constants.CATEGORY;
   const resourceName = constants.CONSOLE_RESOURCE_NAME;
   const currMetaFilePath = pathManager.getCurrentAmplifyMetaFilePath(context);
@@ -107,6 +111,7 @@ function deleteConsoleConfigFromCurrMeta(context) {
 
   currMetaContent[category][resourceName] = undefined;
   fs.writeFileSync(currMetaFilePath, JSON.stringify(currMetaContent, null, 4));
+  await storeCurrentCloudBackend(context);
 }
 
 function deleteConsoleConfigFromTeamProviderInfo(context) {
@@ -167,6 +172,47 @@ function loadConsoleConfigFromTeamProviderinfo(context) {
     return teamProviderInfo[currEnv][categories][category][resource];
   }
   return undefined;
+}
+
+async function storeCurrentCloudBackend(context) {
+  const s3 = await clientFactory.getS3Client(context);
+  const zipFilename = '#current-cloud-backend.zip';
+  const backendDir = context.amplify.pathManager.getBackendDirPath();
+  const tempDir = `${backendDir}/.temp`;
+  const currentCloudBackendDir = context.amplify.pathManager.getCurrentCloudBackendDirPath();
+  const amplifyMetaFilePath = path.join(currentCloudBackendDir, 'amplify-meta.json');
+  const backendConfigFilePath = path.join(currentCloudBackendDir, 'backend-config.json');
+
+  if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+  }
+
+  try {
+    const zipFilePath = path.normalize(path.join(tempDir, zipFilename));
+    await buildUtils.zipFile(currentCloudBackendDir, zipFilePath);
+    await uploadFile(s3, zipFilePath, zipFilename, context);
+    await uploadFile(s3, amplifyMetaFilePath, 'amplify-meta.json', context);
+    await uploadFile(s3, backendConfigFilePath, 'backend-config.json', context);
+  } finally {
+    fs.removeSync(tempDir);
+  }
+}
+
+async function uploadFile(s3, filePath, key, context) {
+  const projectDetails = context.amplify.getProjectDetails();
+  const { envName } = context.amplify.getEnvInfo();
+  if (fs.existsSync(filePath)) {
+    const s3Params = {
+      Body: fs.createReadStream(filePath),
+      Key: key,
+    };
+    const projectBucket = projectDetails.amplifyMeta.providers
+      ? projectDetails.amplifyMeta.providers[constants.PROVIDER].DeploymentBucketName
+      : projectDetails.teamProviderInfo[envName][constants.PROVIDER].DeploymentBucketName;
+    s3Params.Bucket = projectBucket;
+    await s3.putObject(s3Params).promise();
+    return projectBucket;
+  }
 }
 
 module.exports = {

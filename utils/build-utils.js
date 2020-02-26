@@ -3,7 +3,6 @@ const chalk = require('chalk');
 
 const fs = require('fs-extra');
 const archiver = require('archiver');
-const path = require('path');
 const ora = require('ora');
 
 const DIR_NOT_FOUND_ERROR_MESSAGE = 'Please ensure your build path exist';
@@ -11,15 +10,14 @@ const ZIPPING_MESSAGE = 'Zipping artifacts.. ';
 const ZIPPING_SUCCESS_MESSAGE = 'Zipping artifacts completed.';
 const ZIPPING_FAILURE_MESSAGE = 'Zipping artifacts failed.';
 
-function zipFile(sourceDir, destDir) {
+function zipFile(sourceDir, destFilePath) {
   return new Promise((resolve, reject) => {
     const spinner = ora();
     if (!fs.pathExistsSync(sourceDir)) {
       reject(DIR_NOT_FOUND_ERROR_MESSAGE);
     }
     spinner.start(ZIPPING_MESSAGE);
-    const now = new Date();
-    const zipFilePath = path.join(destDir, `${now.getTime()}.zip`);
+    const zipFilePath = destFilePath;
     const output = fs.createWriteStream(zipFilePath);
     const archive = archiver('zip');
     output.on('close', () => {

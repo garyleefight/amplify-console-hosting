@@ -10,6 +10,6 @@
         "status",
         "serve"
     ],
-    "displayName": "amplifyhosting",
+    "displayName": "Hosting with Amplify Console (Managed Hosting, custom domains, continuous deployment)",
     "services": ["amplifyhosting"]
 }

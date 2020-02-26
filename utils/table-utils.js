@@ -6,12 +6,10 @@ async function generateTableContentForApp(context, appId) {
   const spinner = ora();
   spinner.start('Initializing amplify client');
   const amplifyClient = await clientFactory.getAmplifyClient(context);
-  spinner.succeed('Initializing amplify client completed');
   const domainMap = {};
 
   let nextToken = null;
   try {
-    spinner.start('Checking default domains');
     do {
       const { branches } = await amplifyClient.listBranches({
         appId,
@@ -24,8 +22,6 @@ async function generateTableContentForApp(context, appId) {
         domainMap[branchName].push(`https://${branchName}.${appId}.amplifyapp.com`);
       }
     } while (nextToken != null);
-    spinner.succeed('Checking default domains completed');
-    spinner.start('Checking custom domains');
 
     nextToken = null;
     do {

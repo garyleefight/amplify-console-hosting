@@ -1,5 +1,6 @@
 const constants = require('../constants/plugin-constants');
 const pathManager = require('../utils/path-manager');
+const fs = require('fs-extra');
 
 function getAppIdForCurrEnv(context) {
   const currEnv = getCurrEnv(context);
@@ -28,7 +29,8 @@ function getMetaInfo(context) {
 function getBackendInfoConfig(context) {
   const { amplify } = context;
   const backendConfigFilePath = pathManager.getBackendConfigPath(context);
-  const backendConfig = amplify.readJsonFile(backendConfigFilePath);
+  const backendConfig = fs.existsSync(backendConfigFilePath)
+    ? amplify.readJsonFile(backendConfigFilePath) : undefined;
   return backendConfig;
 }
 

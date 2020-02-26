@@ -40,7 +40,9 @@ async function zipArtifacts(context) {
   const frontendConfig = projectConfig[projectConfig.frontend].config;
   const { projectPath } = utils.getLocalEnvInfo(context);
   const buildPath = path.join(projectPath, frontendConfig.DistributionDir);
-  return await builder.zipFile(buildPath, projectPath);
+  const now = new Date();
+  const zipFilePath = path.join(projectPath, `${now.getTime()}.zip`);
+  return await builder.zipFile(buildPath, zipFilePath);
 }
 
 module.exports = {

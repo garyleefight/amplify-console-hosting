@@ -25,17 +25,14 @@ async function enable(context) {
   fs.ensureDirSync(pathManager.getHostingDirPath(context));
   fs.ensureDirSync(serviceDirPath);
 
+  // Init backend config
+  configUtils.initBackendConfig(context, category, resourceName, type);
   // Init meta
   // await configUtils.initNoPushMetaFile(context, category, resourceName, type);
-  configUtils.initMetaFile(context, category, resourceName, type);
+  await configUtils.initMetaFile(context, category, resourceName, type);
 
   // Init team-provider-info
   configUtils.initTeamProviderInfo(context, category, resourceName, type);
-
-  // Init backend config
-  configUtils.initBackendConfig(context, category, resourceName, type);
-
-  console.log('Hosting urls: ');
   await statusMod.status(context);
 }
 

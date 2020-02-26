@@ -53,7 +53,7 @@ function initEnv(context) {
   const resource = constants.CONSOLE_RESOURCE_NAME;
   const backendConfig = utils.getBackendInfoConfig(context);
 
-  if (!backendConfig[category] || !backendConfig[category][resource]) {
+  if (!backendConfig || !backendConfig[category] || !backendConfig[category][resource]) {
     const consoleConfig = configUtils.loadConsoleConfigFromTeamProviderinfo(context);
     if (!consoleConfig) {
       // hosting is not enabled for current env
@@ -97,7 +97,7 @@ async function remove(context) {
   const type = loadDeployType(context);
   // remove config in #current-cloud-backend meta.
   if (type === constants.TYPE_CICD) {
-    configUtils.deleteConsoleConfigFromCurrMeta(context);
+    await configUtils.deleteConsoleConfigFromCurrMeta(context);
   }
 
   return amplify.removeResource(context, category, resource).catch((err) => {

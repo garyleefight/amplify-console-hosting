@@ -47,3 +47,6 @@ export const FRONTEND_NAME_VALIDATION = 'The frontend environment already exists
 export const APP_CONFIGURE_QUESTION = `We recommends you open ${chalk.green('AWS Amplify Console')} to configure advanced settings such as ${chalk.yellow('rewrite/redirect, basic auth, custom domain...')} Open your Amplify Console app to configure?`;
 export const APP_CICD_SERVE_QUESTION = 'You have set up Continuous deployment with Amplify Console. Visit Amplify Console to view your frontend URL?';
 export const APP_MANUAL_SERVE_QUESTION = 'You have set up Manual deployment with Amplify Console. Visit Amplify Console to view your frontend URL?';
+
+export const POST_ADDING_MESSAGE = `${chalk.green('You can now publish your app using the following command:')}`;
+export const POST_PUBLISH_MESSAGE = 'Command: amplify publish';
