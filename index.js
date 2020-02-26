@@ -16,8 +16,8 @@ async function handleAmplifyEvent(context, args) {
   await eventHandlerModule.run(context, args);
 }
 
-function initEnv(context) {
-  hosting.initEnv(context);
+async function initEnv(context) {
+  await hosting.initEnv(context);
 }
 
 async function status(context) {

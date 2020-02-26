@@ -154,8 +154,14 @@ function initBackendConfig(context, category, resourceName, type) {
   }
 
   backendConfig[category][resourceName] = {
+    service: resourceName,
+    providerPlugin: type === constants.TYPE_CICD ? undefined : constants.PROVIDER,
     type,
   };
+  fs.writeFileSync(
+    backendConfigFilePath,
+    JSON.stringify(backendConfig, null, 4),
+  );
 }
 
 function loadConsoleConfigFromTeamProviderinfo(context) {

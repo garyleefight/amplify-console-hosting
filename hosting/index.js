@@ -47,7 +47,7 @@ async function publish(context, doSkipBuild) {
   await hostingModule.publish(context, doSkipBuild);
 }
 
-function initEnv(context) {
+async function initEnv(context) {
   const categories = constants.CATEGORIES;
   const category = constants.CATEGORY;
   const resource = constants.CONSOLE_RESOURCE_NAME;
@@ -65,7 +65,7 @@ function initEnv(context) {
     configUtils.deleteConsoleConfigFromTeamProviderInfo(context);
     // clean #current-backend-env for CICD.
     if (type === constants.TYPE_CICD) {
-      configUtils.deleteConsoleConfigFromTeamProviderInfo(context);
+      await configUtils.deleteConsoleConfigFromCurrMeta(context);
     }
   } else {
     const teamProviderInfo = utils.getTeamProviderInfo(context);
@@ -82,7 +82,7 @@ function initEnv(context) {
       constants.CONSOLE_RESOURCE_NAME
     ];
     const initEnvMod = require(`./${type}/index`);
-    initEnvMod.initEnv(context);
+    await initEnvMod.initEnv(context);
   }
 }
 
