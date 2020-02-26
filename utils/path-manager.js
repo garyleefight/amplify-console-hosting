@@ -48,6 +48,10 @@ function getCurrCloudBackendHostingDirPath(context) {
   return path.join(getCurrentCloudBackendDirPath(context), constants.CATEGORY);
 }
 
+function getCurrBackendConfigFilePath(context) {
+  return context.amplify.pathManager.getCurrentBackendConfigFilePath();
+}
+
 function getCurrCloudBackendAmplifyHostingDirPath(context) {
   return path.join(
     getCurrCloudBackendHostingDirPath(context),
@@ -67,4 +71,5 @@ module.exports = {
   getCurrentCloudBackendDirPath,
   getCurrCloudBackendHostingDirPath,
   getCurrCloudBackendAmplifyHostingDirPath,
+  getCurrBackendConfigFilePath,
 };

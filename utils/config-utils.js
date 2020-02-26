@@ -45,7 +45,7 @@ async function initCurrBackendMeta(context, category, resourceName, type, timeSt
     type,
     lastPushTimeStamp: timeStamp,
   };
-
+  // init backend meta
   const currMetaFilePath = pathManager.getCurrentAmplifyMetaFilePath(context);
   const currMetaContent = context.amplify.readJsonFile(currMetaFilePath);
   if (!currMetaContent[category]) {
@@ -58,6 +58,30 @@ async function initCurrBackendMeta(context, category, resourceName, type, timeSt
 
   currMetaContent[category][resourceName] = metaData;
   fs.writeFileSync(currMetaFilePath, JSON.stringify(currMetaContent, null, 4));
+
+  // init backend config
+  const curBackendConfigFilePath = pathManager.getCurrBackendConfigFilePath(context);
+  if (!fs.existsSync(curBackendConfigFilePath)) {
+    fs.ensureFileSync(curBackendConfigFilePath);
+    fs.writeFileSync(curBackendConfigFilePath, JSON.stringify({}, null, 4));
+  }
+  const backendConfig = context.amplify.readJsonFile(curBackendConfigFilePath);
+
+  if (!backendConfig[category]) {
+    backendConfig[category] = {};
+  }
+
+  if (!backendConfig[category][resourceName]) {
+    backendConfig[category][resourceName] = {};
+  }
+
+  backendConfig[category][resourceName] = {
+    service: resourceName,
+    providerPlugin: type === constants.TYPE_CICD ? undefined : constants.PROVIDER,
+    type,
+  };
+
+  fs.writeFileSync(curBackendConfigFilePath, JSON.stringify(backendConfig, null, 4));
 
   const currHostingDir = pathManager.getCurrCloudBackendHostingDirPath(context);
   const currAmplifyHostingDir = pathManager.getCurrCloudBackendAmplifyHostingDirPath(context);
