@@ -17,7 +17,6 @@ function initEnv(context) {
     .updateamplifyMetaAfterResourceUpdate(category, resourceName, type, constants.TYPE_CICD);
   const metaContent = utis.getMetaInfo(context);
   const { lastPushTimeStamp } = metaContent[category][resourceName];
-  console.log(lastPushTimeStamp);
   configUtils.initCurrBackendMeta(context, category, resourceName, type, lastPushTimeStamp);
 }
 
