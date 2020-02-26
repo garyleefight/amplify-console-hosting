@@ -35,7 +35,7 @@ async function status(context) {
 async function publish(context, service, args) {
   try {
     const { doSkipBuild } = args || {};
-    await hosting.publish(context, doSkipBuild);
+    await hosting.publish(context, doSkipBuild, true);
   } catch (err) {
     if (err.name === 'ValidationError') {
       console.log(chalk.red(err.message));

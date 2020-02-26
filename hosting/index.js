@@ -37,14 +37,14 @@ async function enable(context) {
   } while (doesSelectHelp);
 }
 
-async function publish(context, doSkipBuild) {
+async function publish(context, doSkipBuild, doSkipPush) {
   if (!isHostingEnabled(context)) {
     throw new ValidationError(HOSTING_NOT_ENABLED);
   }
 
   const deployType = loadDeployType(context);
   const hostingModule = require(`./${deployType}/index`);
-  await hostingModule.publish(context, doSkipBuild);
+  await hostingModule.publish(context, doSkipBuild, doSkipPush);
 }
 
 async function initEnv(context) {

@@ -8,8 +8,8 @@ function enable(context) {
   enableMod.enable(context);
 }
 
-async function publish(context) {
-  await publshMod.publish(context);
+async function publish(context, doSkipBuild, doSkipPush) {
+  await publshMod.publish(context, doSkipBuild, doSkipPush);
 }
 
 function initEnv(context) {

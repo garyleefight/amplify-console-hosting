@@ -12,13 +12,15 @@ const ZIPPING_SUCCESS_MESSAGE = 'Zipping artifacts completed.';
 const ZIPPING_FAILURE_MESSAGE = 'Zipping artifacts failed.';
 
 
-async function publish(context, doSkipBuild) {
+async function publish(context, doSkipBuild, doSkipPush) {
   let artifactsPath = null;
   try {
-    if (doSkipBuild) {
+    if (!doSkipPush) {
       await context
         .amplify
         .pushResources(context, constants.CATEGORY, constants.CONSOLE_RESOURCE_NAME);
+    }
+    if (!doSkipBuild) {
       await buildArtifacts(context);
     }
     const amplifyClient = await clientFactory.getAmplifyClient(context);
