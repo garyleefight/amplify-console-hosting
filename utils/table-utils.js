@@ -42,6 +42,9 @@ async function generateTableContentForApp(context, appId) {
       }
     } while (nextToken != null);
     spinner.succeed(('Checking custom domains completed'));
+    if (Object.keys(domainMap).length === 0) {
+      console.log('No amplify console domain detected');
+    } 
     // Init table
     const table = new Table({
       head: ['FrontEnd Env', 'Domain'],
